@@ -51,7 +51,6 @@ class User extends Authenticatable
             new StartableChatCategory('Large category', User::all()->toQuery()),
             new StartableChatCategory('Small category', User::all()->take(10)->toQuery()),
             new StartableChatCategory('Small2 category', User::all()->take(10)->toQuery())
-
         ];
     }
 }

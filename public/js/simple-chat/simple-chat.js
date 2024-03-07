@@ -22,10 +22,12 @@ function setChatHeaderTitle(title){
     document.getElementById('chat-header-title').innerText = title;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-
+// Applies the avatar function and the proper action to given class cell
+// Not using id as it could happen that the same person is in two categories at the same time (and so two elements will have same id)
+function applyAvatarAndActionToUserId(userId)
+{
     //If in page there is an element with class chat-cell, then cycle through each element
-    document.querySelectorAll('.chat-cell').forEach((cell) => {
+    document.querySelectorAll(`[data-chat-id="${userId}"]`).forEach((cell) => {
 
         //Get data-id from cell
         let id = cell.getAttribute('data-chat-id');
@@ -47,6 +49,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
     });
-
-
-});
+}
