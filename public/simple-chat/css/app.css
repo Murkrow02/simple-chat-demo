@@ -2,3 +2,26 @@
     background-color: var(--chat-primary);
     color: white;
 }
+
+.bg-secondary {
+    background-color: var(--chat-secondary);
+    color: white;
+}
+
+.border-primary {
+    border-color: var(--chat-primary);
+}
+
+.active-chat-cell {
+    background-color: var(--chat-active-cell);
+}
+
+.user-message-bubble {
+    background-color: var(--chat-primary);
+    align-self: flex-end;
+}
+
+.other-message-bubble {
+    background-color: #e0e0e0;
+    align-self: flex-start;
+}
