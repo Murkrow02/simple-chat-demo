@@ -3,25 +3,27 @@
 | Elements
 |--------------------------------------------------------------------------
 */
-let openedChat                      = document.getElementById('opened-chat');
-let slideOver                       = document.getElementById('slide-over');
-let newChatModal                    = document.getElementById('new-chat-modal');
-let startedChatsSlideoverContent    = document.getElementById('started-chats-slideover-content');
-let newChatSlideoverContent         = document.getElementById('new-chat-slideover-content');
-let loadingSpinner                  = document.getElementById('loading-spinner');
-let userMessageInput                =  document.getElementById('user-input');
-let chatMessages                    =  document.getElementById('chat-messages');
-let sendButton                      =  document.getElementById('send-button');
-let newChatButton                   =  document.getElementById('new-chat-btn');
-let closeNewChatButton              =  document.getElementById('close-new-chat-btn');
-let slideOverContent                =  document.getElementById('slide-over-content');
+let openedChat = document.getElementById('opened-chat');
+let slideOver = document.getElementById('slide-over');
+let newChatModal = document.getElementById('new-chat-modal');
+let startedChatsSlideoverContent = document.getElementById('started-chats-slideover-content');
+let newChatSlideoverContent = document.getElementById('new-chat-slideover-content');
+let chatsLoadingSpinner = document.getElementById('chats-loading-spinner');
+let chatLoadingSpinner = document.getElementById('chat-loading-spinner');
+let userMessageInput = document.getElementById('user-input');
+let chatMessages = document.getElementById('chat-messages');
+let sendButton = document.getElementById('send-button');
+let newChatButton = document.getElementById('new-chat-btn');
+let closeNewChatButton = document.getElementById('close-new-chat-btn');
+let slideOverContent = document.getElementById('slide-over-content');
+
 /*
 |--------------------------------------------------------------------------
 | Variables
 |--------------------------------------------------------------------------
 */
-let isLeftContainerOpen  = true;
-let currentChatId           = null;
+let isLeftContainerOpen = true;
+let currentChatId = null;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,12 +40,12 @@ document.addEventListener("DOMContentLoaded", function () {
 | UI Functions
 |--------------------------------------------------------------------------
 */
-function showLoadingSpinner() {
-    loadingSpinner.classList.remove('hidden');
+function showLoadingSpinner(el) {
+    el.classList.remove('hidden');
 }
 
-function hideLoadingSpinner() {
-    loadingSpinner.classList.add('hidden');
+function hideLoadingSpinner(el) {
+    el.classList.add('hidden');
 }
 
 function showSlideOver() {
@@ -71,12 +73,12 @@ function showNewChatSlideover() {
 
     // Download new chats if not already downloaded
     if (newChatSlideoverContent.innerHTML.trim() === '') {
-        showLoadingSpinner();
+        showLoadingSpinner(chatsLoadingSpinner);
         axios.get('/chat/new')
             .then(response => {
                 newChatSlideoverContent.innerHTML += response.data;
             }).finally(() => {
-            hideLoadingSpinner();
+            hideLoadingSpinner(chatsLoadingSpinner);
         });
     }
 }
@@ -122,7 +124,7 @@ function scrollMessagesToBottom() {
 }
 
 function scrollChatsToTop() {
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+    slideOverContent.scrollTop = 0;
 }
 
 
@@ -132,12 +134,13 @@ function scrollChatsToTop() {
 |--------------------------------------------------------------------------
 */
 function loadStartedChats() {
-    showLoadingSpinner();
+    showLoadingSpinner(chatsLoadingSpinner);
     axios.get('/chat/chats')
         .then(response => {
             startedChatsSlideoverContent.innerHTML = response.data;
         }).finally(() => {
-        hideLoadingSpinner();
+        hideLoadingSpinner(chatsLoadingSpinner);
+        scrollChatsToTop();
     });
 }
 
@@ -167,6 +170,9 @@ function currentChatChanged(newChatId) {
     // Show chat view
     openedChat.hidden = false;
 
+    // Show loading spinner
+    showLoadingSpinner(chatLoadingSpinner);
+
     // Clear messages from messages div
     chatMessages.innerHTML = '';
 
@@ -181,7 +187,10 @@ function currentChatChanged(newChatId) {
         })
         .catch(function (error) {
             console.log(error);
-        });
+        }).finally(function () {
+        hideLoadingSpinner(chatLoadingSpinner);
+    });
+
 }
 
 function sendNewMessage() {
@@ -210,6 +219,6 @@ function sendNewMessage() {
     })
 }
 
-    // {{--Echo.private('chat.{{$chat['id']}}').listen('.new-message', function(data) {--}}
-    // {{--    //addMessage(data.body, false); RENDER MESSAGE BUBBLE FROM SERVER--}}
-    //     {{--});--}}
+// {{--Echo.private('chat.{{$chat['id']}}').listen('.new-message', function(data) {--}}
+// {{--    //addMessage(data.body, false); RENDER MESSAGE BUBBLE FROM SERVER--}}
+//     {{--});--}}

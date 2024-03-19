@@ -45,12 +45,9 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function getStartableChatsCategories($filters): array|string
+
+    public function getSecondLineAttribute(): string
     {
-        return [
-            new StartableChatCategory('Large category', User::all()->toQuery()),
-            new StartableChatCategory('Small category', User::all()->take(10)->toQuery()),
-            new StartableChatCategory('Small2 category', User::all()->take(10)->toQuery())
-        ];
+        return $this->email;
     }
 }
